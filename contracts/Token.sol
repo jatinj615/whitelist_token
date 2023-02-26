@@ -20,6 +20,8 @@ contract Token is ERC20, AccessControl {
     
     error TransferNotAllowed();
 
+    uint256 immutable public exchangeRate;
+
     // accounts status mappings
     mapping(address=> AccountStatus) public accountsStatus;
 
@@ -33,9 +35,11 @@ contract Token is ERC20, AccessControl {
     constructor(
         string memory _tokenName, 
         string memory _tokenSymbol,
+        uint256 _exchangeRate,
         address[] memory _accounts
     ) ERC20(_tokenName, _tokenSymbol) {
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        exchangeRate = _exchangeRate;
         for(uint8 i = 0; i < _accounts.length; i++) {
             accountsStatus[_accounts[i]].accountStatus = Status.WHITELISTED;
         }
@@ -97,4 +101,16 @@ contract Token is ERC20, AccessControl {
             (accountsStatus[_to].interactedAccounts).push(_from);
         }
     }
+
+    /// @notice Lets User purchase tokens at fixed rate by checking exchange rate
+    /// @dev mint amount should be paid in native currency
+    /// @param _amount amount of tokens user wants to mint
+    function mint(uint256 _amount) external payable {
+        require(accountsStatus[msg.sender].accountStatus == Status.WHITELISTED, "Error: Not Whitelisted");
+        require((msg.value * exchangeRate) == _amount, "Error: Not enough liquidity provided");
+        _mint(msg.sender, _amount);
+    }
+
+    // to receive native currency
+    receive() external payable{}
 }
