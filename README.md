@@ -1,11 +1,13 @@
 # BlackList-WhiteList Token
 
+Deployed token address: <a href="https://goerli.etherscan.io/address/0x6a1bE7a8e9D85e9aC7c2F427143848d50789B1aa">0x6a1bE7a8e9D85e9aC7c2F427143848d50789B1aa</a>
+
 ## Setup
 - Install the dependencies.
   ```
   npm install
   ```
-- Create `.env` file and setup environment variables required. For reference look at `.env.example`.
+- Create `.env` file and setup environment variables required. For reference follow `.env.example`.
   ```
   touch .env
   ```

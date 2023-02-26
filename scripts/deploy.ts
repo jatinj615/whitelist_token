@@ -11,7 +11,9 @@ async function main() {
 
   const tokenFactory = await ethers.getContractFactory("Token");
   const token = await tokenFactory.deploy(tokenName, tokenSymbol, exchangeRate, whitelistedAccounts);
-  await token.deployed();
+  const tx = await token.deployed();
+  
+  await tx.deployTransaction.wait(5);
 
   await verifyContract(token.address, [tokenName, tokenSymbol, exchangeRate, whitelistedAccounts]);
 
