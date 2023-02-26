@@ -1,13 +1,31 @@
-# Sample Hardhat Project
+# BlackList-WhiteList Token
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a script that deploys that contract.
+## Setup
+- Install the dependencies.
+  ```
+  npm install
+  ```
+- Create `.env` file and setup environment variables required. For reference look at `.env.example`.
+  ```
+  touch .env
+  ```
+  ```
+  <!-- .env file format -->
+  ALCHEMY_API_KEY=<YOUR_KEY>
+  MNEMONIC=<YOUR_MNEMONIC>
+  ETHERSCAN_API_KEY=<YOUR_KEY>
+  ```
+- Compile the SmartContracts.
+  ```
+  npx hardhat compile
+  ```
+- Run the tests script under `./test`.
+  ```
+  npx hardhat test
+  ```
+- Deploy and verify the Smart Contract.
+  ```
+  npx hardhat run ./scripts/deploy.ts --network <NETWORK_NAME>
+  ```
 
-Try running some of the following tasks:
-
-```shell
-npx hardhat help
-npx hardhat test
-REPORT_GAS=true npx hardhat test
-npx hardhat node
-npx hardhat run scripts/deploy.ts
-```
+Note: `./scripts/useToken.tsx` script can be directly used in React Frontend to interact with the smart contract.
