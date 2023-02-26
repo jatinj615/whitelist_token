@@ -74,7 +74,7 @@ contract Token is ERC20, AccessControl {
     }
 
     /// @notice checks if both thefrom and to addresses are whitelisted 
-    /// @dev Reverts the transaction if sending or receiving address is not whitelisted
+    /// @dev Reverts the transaction if sending or receiving address is not whitelisted, ignore mint and burn
     /// @param _from spender address
     /// @param _to receiver address
     function _beforeTokenTransfer(
@@ -82,12 +82,12 @@ contract Token is ERC20, AccessControl {
         address _to, 
         uint256
     ) internal virtual override {
-        if(accountsStatus[_from].accountStatus != Status.WHITELISTED ||
-            accountsStatus[_to].accountStatus != Status.WHITELISTED) revert TransferNotAllowed();
+        if(_from != address(0) && _to != address(0) && (accountsStatus[_from].accountStatus != Status.WHITELISTED ||
+            accountsStatus[_to].accountStatus != Status.WHITELISTED)) revert TransferNotAllowed();
     }
 
     /// @notice add the direct interaction of spender and receiver
-    /// @dev if spender and receiver interacted directly for the first time then add otherwise skip
+    /// @dev if spender and receiver interacted directly for the first time then add otherwise skip, ignore mint and burn
     /// @param _from spender address
     /// @param _to receiver address
     function _afterTokenTransfer(
@@ -95,7 +95,8 @@ contract Token is ERC20, AccessControl {
         address _to, 
         uint256
     ) internal virtual override {
-        if(!(interactions[keccak256(abi.encode(_from, _to))] || interactions[keccak256(abi.encode(_to, _from))])){
+        if(_from != address(0) && _to != address(0) &&
+            !(interactions[keccak256(abi.encode(_from, _to))] || interactions[keccak256(abi.encode(_to, _from))])){
             interactions[keccak256(abi.encode(_from, _to))] = true;
             (accountsStatus[_from].interactedAccounts).push(_to);
             (accountsStatus[_to].interactedAccounts).push(_from);
@@ -107,7 +108,7 @@ contract Token is ERC20, AccessControl {
     /// @param _amount amount of tokens user wants to mint
     function mint(uint256 _amount) external payable {
         require(accountsStatus[msg.sender].accountStatus == Status.WHITELISTED, "Error: Not Whitelisted");
-        require((msg.value * exchangeRate) == _amount, "Error: Not enough liquidity provided");
+        require((msg.value * exchangeRate) >= _amount, "Error: Not enough liquidity provided");
         _mint(msg.sender, _amount);
     }
 
