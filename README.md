@@ -34,11 +34,9 @@ Note: `./scripts/useToken.tsx` script can be directly used in React Frontend to 
 
 ## Onchain Whitelisting
 
-1. Architecture for Storing whitelist on chain (not optimised will consume alot of gas while changing whitelist and blacklist accounts)
-
+1. Architecture for Storing whitelist on chain (not optimized will consume a lot of gas while changing whitelist and blacklist accounts)
     <image src="./onchain.jpg">
 
 
-2. Architecture for Storing Whitelist offchain and using merkle root onchain
-
+2. Architecture for Storing Whitelist offchain and using merkle root onchain. (any time admin makes changes to whitelist/blacklist addresses they just need to update merkle root on chain, which is gas efficient)
     <image src="./offchainWithMerkleProof.jpg">
