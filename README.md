@@ -31,3 +31,14 @@ Deployed token address: <a href="https://goerli.etherscan.io/address/0x6a1bE7a8e
   ```
 
 Note: `./scripts/useToken.tsx` script can be directly used in React Frontend to interact with the smart contract.
+
+## Onchain Whitelisting
+
+1. Architecture for Storing whitelist on chain (not optimised will consume alot of gas while changing whitelist and blacklist accounts)
+
+    <image src="./onchain.jpg">
+
+
+2. Architecture for Storing Whitelist offchain and using merkle root onchain
+
+    <image src="./offchainWithMerkleProof.jpg">
