@@ -27,7 +27,11 @@ Deployed token address: <a href="https://goerli.etherscan.io/address/0x6a1bE7a8e
   ```
 - Deploy and verify the Smart Contract.
   ```
-  npx hardhat run ./scripts/deploy.ts --network <NETWORK_NAME>
+  npx hardhat run ./scripts/deploy.ts --network goerli
+  ```
+- Test the Deployed Smart Contract using `scripts/useToken.ts`. Change the global variable `tokenAddress` with the deployed token address. To run the script -
+  ```
+  npx hardhat run scripts/useToken.ts --network goerli
   ```
 
 Note: `./scripts/useToken.tsx` script can be directly used in React Frontend to interact with the smart contract.
