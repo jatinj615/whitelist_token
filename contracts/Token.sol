@@ -15,6 +15,7 @@ contract Token is ERC20, AccessControl {
 
     struct AccountStatus {
         address[] interactedAccounts;
+        uint256 directBlacklistCount;
         Status accountStatus;
     }
     
@@ -54,6 +55,7 @@ contract Token is ERC20, AccessControl {
         for(uint256 i = 0; i< directInteractions.length; i++) {
             if(accountsStatus[directInteractions[i]].accountStatus == Status.WHITELISTED) {
                 accountsStatus[directInteractions[i]].accountStatus = Status.GREYLISTED;
+                accountsStatus[directInteractions[i]].directBlacklistCount++;
             }
         }
         emit BlackListed(blacklist);
@@ -67,7 +69,12 @@ contract Token is ERC20, AccessControl {
         address[] memory directInteractions = accountsStatus[whitelist].interactedAccounts;
         for (uint256 i = 0; i < directInteractions.length; i++) {
             if(accountsStatus[directInteractions[i]].accountStatus == Status.GREYLISTED) {
-                accountsStatus[directInteractions[i]].accountStatus = Status.WHITELISTED;
+                if(accountsStatus[directInteractions[i]].directBlacklistCount > 0) {
+                    accountsStatus[directInteractions[i]].directBlacklistCount--;
+                }
+                if(accountsStatus[directInteractions[i]].directBlacklistCount == 0){
+                    accountsStatus[directInteractions[i]].accountStatus = Status.WHITELISTED;
+                }
             }
         }
         emit WhiteListed(whitelist);
